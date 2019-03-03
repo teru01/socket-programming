@@ -1,0 +1,8 @@
+[package]
+name = "rust-network"
+version = "0.1.0"
+authors = ["teruya"]
+edition = "2018"
+
+[dependencies]
+rand = "0.3.17"
