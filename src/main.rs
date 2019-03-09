@@ -1,13 +1,11 @@
-extern crate rand;
-
-use std::io::{Read, Write, Error};
+use std::io::{Read, Error};
 use std::net::{TcpListener, TcpStream};
 use std::thread;
 use std::str;
 
 fn handler(mut stream: TcpStream) -> Result<(), Error> {
-    println!("my addr is {}", stream.local_addr()?);
-    println!("handling data from {}", stream.peer_addr()?);
+    println!("My addr is {}", stream.local_addr()?);
+    println!("Handling data from {}", stream.peer_addr()?);
     let mut buffer = [0u8; 1024];
     loop {
         let nbytes = stream.read(&mut buffer)?;
@@ -19,7 +17,7 @@ fn handler(mut stream: TcpStream) -> Result<(), Error> {
 }
 
 fn main() {
-    let listener = TcpListener::bind("0.0.0.0:33333").expect("Error. failed to bind.");
+    let listener = TcpListener::bind("0.0.0.0:33333").expect("Error. failed to bind to the address");
     for streams in listener.incoming() {
         match streams {
             Err(e) => { eprintln!("error: {}", e)},
