@@ -14,16 +14,16 @@ fn main() {
     socket.set_read_timeout(Some(Duration::from_secs(2))).unwrap();
     socket.set_write_timeout(Some(Duration::from_secs(2))).unwrap();
 
-    loop {
-        let mut input = String::new();
-        io::stdin().read_line(&mut input).unwrap();
+    // loop {
+        let mut input = "a".to_string().repeat(8000);
+        // io::stdin().read_line(&mut input).unwrap();
 
         socket.send_to(input.as_bytes(), &remote).expect("failed to send data");
 
         let mut buffer = [0u8; 1500];
         socket.recv_from(&mut buffer).expect("failed to receive");
         print!("{}", str::from_utf8(&buffer).expect("failed to convert to String"));
-    }
+    // }
 }
 
 // /**

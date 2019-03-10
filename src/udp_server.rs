@@ -1,5 +1,6 @@
 use std::net::UdpSocket;
 use std::thread;
+use std::str;
 
 fn main() {
     let server_socket = UdpSocket::bind("127.0.0.1:12345")
@@ -15,7 +16,8 @@ fn main() {
                     println!("handling data from {}", src);
                     println!("{} bytes received", size.to_string());
                     // server_socket.send_to(&buf, src).expect("fail");
-                    client_socket.send_to(&buf, src).expect("failed to send response");
+                    print!("{}", str::from_utf8(&buf[..size]).expect("failed to read"));
+                    client_socket.send_to(&buf[..size], src).expect("failed to send response");
                 });
             },
             Err(e) => {
