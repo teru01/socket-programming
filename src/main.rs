@@ -1,4 +1,6 @@
-use std::io::{Read, Error};
+extern crate serde;
+extern crate serde_json;
+use std::io::{Read, Write, Error};
 use std::net::{TcpListener, TcpStream};
 use std::thread;
 use std::str;
@@ -12,7 +14,9 @@ fn handler(mut stream: TcpStream) -> Result<(), Error> {
         if nbytes == 0 {
             return Ok(());
         }
-        print!("{}", str::from_utf8(&buffer).expect("failed to read"));
+        print!("{}", str::from_utf8(&buffer[..nbytes]).expect("failed to read"));
+        stream.write(&buffer[..nbytes])?;
+        stream.flush()?;
     }
 }
 
