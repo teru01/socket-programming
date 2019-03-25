@@ -4,6 +4,3 @@ version = "0.1.0"
 authors = ["teruya"]
 edition = "2018"
 
-[dependencies]
-serde_json = "1.0"
-serde = "1.0"

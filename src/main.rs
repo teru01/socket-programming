@@ -1,9 +1,6 @@
-extern crate serde;
-extern crate serde_json;
 use std::io::{Read, Write, Error};
 use std::net::{TcpListener, TcpStream};
-use std::thread;
-use std::str;
+use std::{thread, str};
 
 fn handler(mut stream: TcpStream) -> Result<(), Error> {
     println!("My addr is {}", stream.local_addr()?);
@@ -33,9 +30,3 @@ fn main() {
         }
     }
 }
-
-// listener.incoming()は新規のコネクションが構築されるまでメインスレッドをブロックして、
-// イテレータを返すのでそれでループを回している
-// Iterating over it is equivalent to calling accept in a loop.
-// tcpstreamはサーバーソケットのaccept後やクライアントからの接続に使う。
-

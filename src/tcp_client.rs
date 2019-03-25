@@ -1,18 +1,12 @@
-// extern crate serde;
-// extern crate serde_json;
-
 use std::net::TcpStream;
 use std::{str, env};
 use std::time::Duration;
 use std::io::{self, BufRead, BufReader, Write};
-// use std::fs::File;
-// use std::io::prelude::*;
-
 
 fn main() {
     let args: Vec<String> = env::args().collect();
     if args.len() != 2 {
-        eprintln!("please specify address and port. Usage: ./main [address]:[port]");
+        eprintln!("Please specify address and port. Usage: ./main [address]:[port]");
         std::process::exit(1);
     }
     let remote = args[1].parse().expect("Usage: ./main [address]:[port]");
@@ -32,5 +26,3 @@ fn main() {
         print!("{}", str::from_utf8(&buffer).expect("failed to convert to a String"));
     }
 }
-// TCPStream, TCPListenerしかない。TCPSoceketはない？
-
