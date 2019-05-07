@@ -19,32 +19,28 @@ fn main() {
     let role: &str = &args[2];
     let address = &args[3];
     match protocol {
-        "tcp" => {
-            match role {
-                "server" => {
-                    // TODO: 実装の追加
-                }
-                "client" => {
-                    // TODO: 実装の追加
-                }
-                _ => {
-                    missing_role();
-                }
+        "tcp" => match role {
+            "server" => {
+                tcp_server::serve(address).unwrap_or_else(|e| error!("{}", e));
             }
-        }
-        "udp" => {
-            match role {
-                "server" => {
-                    // TODO: 実装の追加
-                }
-                "client" => {
-                    // TODO: 実装の追加
-                }
-                _ => {
-                    missing_role();
-                }
+            "client" => {
+                tcp_client::connect(address).unwrap_or_else(|e| error!("{}", e));
             }
-        }
+            _ => {
+                missing_role();
+            }
+        },
+        "udp" => match role {
+            "server" => {
+                udp_server::serve(address).unwrap_or_else(|e| error!("{}", e));
+            }
+            "client" => {
+                udp_client::communicate(address).unwrap_or_else(|e| error!("{}", e));
+            }
+            _ => {
+                missing_role();
+            }
+        },
         _ => {
             error!("Please specify tcp or udp on the 1st argument.");
             std::process::exit(1);
