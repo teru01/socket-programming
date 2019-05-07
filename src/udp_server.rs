@@ -1,20 +1,21 @@
-use std::net::UdpSocket;
-use std::str;
+use std::net::{ UdpSocket, SocketAddr };
+use std::{ str, thread };
 
-fn main() {
-    let server_socket = UdpSocket::bind("127.0.0.1:12345")
-                           .expect("Failed to bind socket");
+pub fn serve(address: &str) -> Result<(), failure::Error> {
+    let server_socket = UdpSocket::bind(address)?;
     loop {
         let mut buf = [0u8; 1024];
-        match server_socket.recv_from(&mut buf) {
-            Ok((size, src)) => {
-                    println!("handling data from {}", src);
-                    print!("{}", str::from_utf8(&buf[..size]).expect("Failed to read"));
-                    server_socket.send_to(&buf[..size], src).expect("Failed to send response");
-            },
-            Err(e) => {
-                eprintln!("could not recieve a datagram: {}", e);
-            }
-        }
+        let (size, src) = server_socket.recv_from(&mut buf)?;
+        debug!("Handling data from {}", src);
+        let socket = server_socket.try_clone()?;
+        thread::spawn(move || {
+            handler(socket, src, &buf[..size]).unwrap_or_else(|error| error!("{:?}", error));
+        });
     }
+}
+
+fn handler(socket: UdpSocket, dest: SocketAddr, buf: &[u8]) -> Result<(), failure::Error> {
+    print!("{}", str::from_utf8(buf)?);
+    socket.send_to(&buf, dest)?;
+    Ok(())
 }
