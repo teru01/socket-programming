@@ -7,11 +7,6 @@ mod tcp_server;
 mod udp_client;
 mod udp_server;
 
-fn missing_role() {
-    error!("Please specify server or client on the 2nd argument.");
-    std::process::exit(1);
-}
-
 fn main() {
     env::set_var("RUST_LOG", "debug");
     env_logger::init();
@@ -30,7 +25,7 @@ fn main() {
                     tcp_server::serve(address).unwrap_or_else(|e| error!("{}", e));
                 }
                 "client" => {
-                //     tcp_client(address)?;
+                    tcp_client::connect(address).unwrap_or_else(|e| error!("{}", e));
                 }
                 _ => {
                     missing_role();
@@ -40,7 +35,7 @@ fn main() {
         "udp" => {
             match role {
                 "server" => {
-                    // udp_server::serve(address)?;
+                    udp_server::serve(address).unwrap_or_else(|e| error!("{}", e));
                 }
                 "client" => {
                     // udp_client(address)?;
@@ -55,4 +50,12 @@ fn main() {
             std::process::exit(1);
         }
     }
+}
+
+/**
+ * 第2引数が不正な時にエラーを出す関数
+ */
+fn missing_role() {
+    error!("Please specify server or client on the 2nd argument.");
+    std::process::exit(1);
 }
