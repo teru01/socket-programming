@@ -7,14 +7,13 @@ use std::{str, thread};
  */
 pub fn serve(address: &str) -> Result<(), failure::Error> {
     let listener = TcpListener::bind(address)?;
-    for stream in listener.incoming() {
-        let stream = stream?;
+    loop {
+        let (stream, _) = listener.accept()?;
         // スレッドを立ち上げて接続に対処する。
         thread::spawn(move || {
             handler(stream).unwrap_or_else(|error| error!("{:?}", error));
         });
     }
-    Ok(())
 }
 
 /**
@@ -26,10 +25,10 @@ fn handler(mut stream: TcpStream) -> Result<(), failure::Error> {
     loop {
         let nbytes = stream.read(&mut buffer)?;
         if nbytes == 0 {
+            debug!("Connection closed.");
             return Ok(());
         }
         print!("{}", str::from_utf8(&buffer[..nbytes])?);
-        stream.write(&buffer[..nbytes])?;
-        stream.flush()?;
+        stream.write_all(&buffer[..nbytes])?;
     }
 }
