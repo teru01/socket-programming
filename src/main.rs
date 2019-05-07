@@ -22,10 +22,10 @@ fn main() {
         "tcp" => {
             match role {
                 "server" => {
-                    tcp_server::serve(address).unwrap_or_else(|e| error!("{}", e));
+                    // TODO: 実装の追加
                 }
                 "client" => {
-                    tcp_client::connect(address).unwrap_or_else(|e| error!("{}", e));
+                    // TODO: 実装の追加
                 }
                 _ => {
                     missing_role();
@@ -35,10 +35,10 @@ fn main() {
         "udp" => {
             match role {
                 "server" => {
-                    udp_server::serve(address).unwrap_or_else(|e| error!("{}", e));
+                    // TODO: 実装の追加
                 }
                 "client" => {
-                    // udp_client(address)?;
+                    // TODO: 実装の追加
                 }
                 _ => {
                     missing_role();
