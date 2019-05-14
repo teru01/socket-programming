@@ -6,7 +6,7 @@ use std::{str, thread};
  * 指定のソケットアドレスで接続を待ち受ける
  */
 pub fn serve(address: &str) -> Result<(), failure::Error> {
-    let listener = TcpListener::bind(address)?;
+    let listener = TcpListener::bind(address)?; /* [1] */
     loop {
         let (stream, _) = listener.accept()?;
         // スレッドを立ち上げて接続に対処する。
